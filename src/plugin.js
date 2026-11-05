@@ -2,11 +2,11 @@
 //
 // 装配（~/.dsh/profiles/desktop/cordis.patch.yml 的 insert 列表）：
 //   - id: weekly-report
-//     name: "P:/工程/DeepseekHarness/系统/weekly-report/src/plugin.js"
+//     name: "/absolute/path/to/DSH-WeeklyReport-WhenOneWeekFinish/src/plugin.js"
 //     config:
-//       to: lzx_xkzdwb@163.com
-//       address: xkdobepc@163.com
-//       secretsFile: "P:/工程/DeepseekHarness/系统/email-approval/secrets.json"
+//       to: you@example.com
+//       address: sender@example.com
+//       secretsFile: "/absolute/path/to/DSH-WeeklyReport-WhenOneWeekFinish/secrets.json"
 //       weekday: 0        # 0=周日 … 6=周六
 //       time: "00:00"
 // 改完要重启 DSH 才会装载（插件在 HOST 启动时加载）。

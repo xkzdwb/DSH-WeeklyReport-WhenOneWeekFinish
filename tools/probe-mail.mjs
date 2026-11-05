@@ -1,16 +1,20 @@
 // 连通性探测：只握手认证、不投信（不发任何邮件）。
-// 用法：node tools/probe-mail.mjs
+// 用法：node tools/probe-mail.mjs [secrets.json]
 import { readFileSync } from 'node:fs'
 import { once } from 'node:events'
 import tls from 'node:tls'
 import { hostname } from 'node:os'
 
-const SECRETS = 'P:\\工程\\DeepseekHarness\\系统\\email-approval\\secrets.json'
-const HOST = 'smtp.163.com'
-const PORT = 465
-const USER = 'xkdobepc@163.com'
+const SECRETS = process.argv[2] ?? process.env.WEEKLY_REPORT_SECRETS ?? 'secrets.json'
+const HOST = process.env.WEEKLY_REPORT_SMTP_HOST ?? 'smtp.163.com'
+const PORT = Number(process.env.WEEKLY_REPORT_SMTP_PORT ?? 465)
 
 const secrets = JSON.parse(readFileSync(SECRETS, 'utf8'))
+const USER = secrets.user ?? secrets.address ?? process.env.WEEKLY_REPORT_FROM
+if (!USER) {
+  console.error('缺少发信账号：在 secrets 文件里写 user 或 address，或设置 WEEKLY_REPORT_FROM')
+  process.exit(2)
+}
 const socket = tls.connect({ host: HOST, port: PORT, servername: HOST })
 socket.setEncoding('latin1')
 let buffer = ''

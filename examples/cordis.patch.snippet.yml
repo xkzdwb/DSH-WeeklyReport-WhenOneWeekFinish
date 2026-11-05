@@ -1,25 +1,28 @@
-# 把这段加进 ~/.dsh/profiles/desktop/cordis.patch.yml 的 `- insert:` 列表里，
-# 然后重启 DSH。路径按你机器上的实际位置改；config 里只有 email 相关的值需要改。
+# 把这段追加到 ~/.dsh/profiles/<profile>/cordis.patch.yml 的 insert 列表里。
+#
+# 说明：
+# - name 指向本仓库里的插件文件，必须是机器上的绝对路径（Windows 用正斜杠更稳）。
+# - to 是收件人，address 是发信账号；两者都换成你自己的邮箱。
+# - 授权码不要写在这里，放 secrets.json（见 .gitignore 与 secrets.example.json）。
+# - weekday：0=周日 … 6=周六；「周六夜里零点」= 周日 00:00 → weekday: 0，
+#   想要周六 00:00 就写 6。
+# - time 必须带引号，否则 YAML 会把它当成 60 进制整数。
+# - 改完需要重启 DSH 才会装载（插件在 HOST 启动时读取源码）。
 - insert:
     - id: weekly-report
-      name: "P:/工程/DeepseekHarness/系统/weekly-report/src/plugin.js"
+      name: "/absolute/path/to/DSH-WeeklyReport-WhenOneWeekFinish/src/plugin.js"
       config:
-        # 发给谁 / 用哪个邮箱发
-        to: lzx_xkzdwb@163.com
-        address: xkdobepc@163.com
+        to: you@example.com
+        address: sender@example.com
         displayName: DSH 周报
-        # 授权码（不是登录密码）放在这个文件里：{"authCode":"…"}
-        secretsFile: "P:/工程/DeepseekHarness/系统/email-approval/secrets.json"
-        # 发送时刻：weekday 0=周日 1=周一 … 6=周六；time 为当地 24 小时制
-        # 「周六晚上凌晨 0 点」= 周日 00:00 → weekday: 0
-        # 想改成周六 00:00 就写 weekday: 6
+        secretsFile: "/absolute/path/to/DSH-WeeklyReport-WhenOneWeekFinish/secrets.json"
         weekday: 0
         time: "00:00"
         timeZone: Asia/Shanghai
         # 到点时 DSH 没开：下次启动补发一次（主题带「补发」）
         catchUp: true
         windowDays: 7
-        # 与 04-统计插件（用量面板）同一套占位价，改这里等于同时改邮件里的费用
+        # 与用量面板同一套占位价，单位是「每 100 万 token」；换模型时改这里
         pricing:
           default:
             input: 2

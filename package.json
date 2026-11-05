@@ -3,8 +3,23 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "DSH 每周邮件周报：每周固定时刻把这一周的 token 用量与工作汇总发到指定邮箱。",
+  "description": "DSH 每周邮件周报：每周固定时刻把这一周的 token 用量与工作汇总发到指定邮箱。零依赖",
   "main": "src/plugin.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek",
+    "cordis",
+    "plugin",
+    "weekly-report",
+    "email",
+    "smtp",
+    "tokens",
+    "usage"
+  ],
   "scripts": {
     "test": "node test/run-tests.mjs",
     "preview": "node tools/weekly-report.mjs --days 7",

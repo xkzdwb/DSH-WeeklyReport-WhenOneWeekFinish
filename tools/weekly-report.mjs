@@ -1,6 +1,6 @@
 // 命令行用：不启动 DSH，直接读 ~/.dsh/sessions 生成一份周报。
-//   预览（默认不发信）：node tools/weekly-report.mjs
-//   发一封测试信：      node tools/weekly-report.mjs --send --subject-prefix "[DSH 周报测试]"
+//   预览（默认不发信）：node tools/weekly-report.mjs --to you@example.com --secrets secrets.json
+//   发一封测试信：      node tools/weekly-report.mjs --to you@example.com --secrets secrets.json --send
 //   指定统计窗口：      node tools/weekly-report.mjs --days 7 --end schedule
 import { writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -11,11 +11,11 @@ import { renderHtml, renderSubject, renderText } from '../src/report.mjs'
 import { sendWeeklyMail } from '../src/mail/send.mjs'
 import { DAY_MS, formatInZone, nextOccurrence, previousOccurrence } from '../src/schedule.mjs'
 
-const SECRETS = 'P:\\工程\\DeepseekHarness\\系统\\email-approval\\secrets.json'
+const SECRETS = process.env.WEEKLY_REPORT_SECRETS ?? 'secrets.json'
 
 const BASE_CONFIG = {
-  address: 'xkdobepc@163.com',
-  to: 'lzx_xkzdwb@163.com',
+  address: process.env.WEEKLY_REPORT_FROM ?? 'sender@example.com',
+  to: process.env.WEEKLY_REPORT_TO ?? 'you@example.com',
   secretsFile: SECRETS,
 }
 
@@ -40,6 +40,7 @@ const args = parseArgs(process.argv.slice(2))
 const config = { ...BASE_CONFIG }
 if (typeof args.to === 'string') config.to = args.to
 if (typeof args.address === 'string') config.address = args.address
+if (typeof args.secrets === 'string') config.secretsFile = resolve(args.secrets)
 if (typeof args['subject-prefix'] === 'string') config.subjectPrefix = args['subject-prefix']
 if (typeof args.days === 'string') config.windowDays = Number(args.days)
 if (args['dry-run'] === true) config.dryRun = true

@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs'
 const DEFAULT_SMTP = { host: 'smtp.163.com', port: 465, secure: true, starttls: false }
 
 export const DEFAULTS = {
-  address: 'xkdobepc@163.com',   // 发信账号（授权码请放进 secretsFile）
+  address: 'sender@example.com',  // 发信账号（换成你的邮箱；授权码请放进 secretsFile）
   to: '',                        // 收件人，必填
   displayName: 'DSH 周报',
   subjectPrefix: '[DSH 周报]',

@@ -101,7 +101,7 @@ test('formatInZone / describeSchedule', () => {
 
 // ───────────────────────────── 配置 ─────────────────────────────
 console.log('\n[配置]')
-const baseConfig = { to: 'lzx_xkzdwb@163.com', authCode: 'test-auth-code' }
+const baseConfig = { to: 'you@example.com', authCode: 'test-auth-code' }
 
 test('默认值：周日 00:00、7 天窗口', () => {
   const settings = readSettings(baseConfig)
@@ -110,7 +110,7 @@ test('默认值：周日 00:00、7 天窗口', () => {
   assert.equal(settings.minute, 0)
   assert.equal(settings.windowDays, 7)
   assert.equal(settings.timeZone, SHANGHAI)
-  assert.equal(settings.address, 'xkdobepc@163.com')
+  assert.equal(settings.address, 'sender@example.com')
   assert.equal(settings.catchUp, true)
   assert.equal(settings.smtp.port, 465)
 })
@@ -175,9 +175,9 @@ function title(time, text) {
 const sessions = [
   {
     id: 's1',
-    header: { id: 's1', cwd: 'P:\\工程\\A' },
+    header: { id: 's1', cwd: '/work/A' },
     events: [
-      event('session', undefined, undefined, { cwd: 'P:\\工程\\A' }),
+      event('session', undefined, undefined, { cwd: '/work/A' }),
       title(at('2026-11-02T10:00:00+08:00'), '改造 A 模块'),
       user(at('2026-11-02T10:00:00+08:00'), '把 A 模块改成异步\n顺便补测试'),
       assistant(at('2026-11-02T10:01:00+08:00'), { inputTokens: 1_000_000, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0 }),
@@ -188,7 +188,7 @@ const sessions = [
   },
   {
     id: 's2',
-    header: { id: 's2', cwd: 'P:\\工程\\B', delegationDepth: 1 },
+    header: { id: 's2', cwd: '/work/B', delegationDepth: 1 },
     events: [
       user(at('2026-11-03T09:00:00+08:00'), '子代理的活', 'subagent'),
       assistant(at('2026-11-03T09:01:00+08:00'), { inputTokens: 500_000, outputTokens: 100_000, cacheReadTokens: 2_000_000, cacheWriteTokens: 0 }, 'deepseek-flash', 'auto-time'),
@@ -273,9 +273,9 @@ test('condense 压成一行并截断', () => {
 })
 
 test('首条请求里的密钥会被打码', () => {
-  const raw = '帮我配一下 sk-d547ff0c1b18ff7cec6efeca1bfe9b30aa26e1c9da126ab49235aa35d2788373 kakouai.com'
+  const raw = '帮我配一下 sk-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef kakouai.com'
   const out = condense(raw, 300)
-  assert.ok(!out.includes('d547ff0c'), out)
+  assert.ok(!out.includes('0123456789abcdef'), out)
   assert.match(out, /\[已隐去密钥\]/)
   assert.match(out, /kakouai\.com/, '正常文字不受影响')
   assert.match(condense('password: hunter2hunter2', 200), /password: \[已隐去\]/)
@@ -387,7 +387,7 @@ function makeRunner({ now, sends, failFirst = 0, dryRun = false, catchUp = true,
           throw new Error('SMTP 530 认证失败')
         }
         sends.push(subject)
-        return { messageId: '<test@163.com>' }
+        return { messageId: '<test@example.com>' }
       },
       loadState,
       saveState,
@@ -559,7 +559,7 @@ await testAsync('apply() 能挂上两条路由，status 报出下次发送时间
   routes.get('/plugin-weekly-report/status').handler(fakeRequest('/plugin-weekly-report/status'), statusRes)
   assert.equal(statusRes.statusCode, 200)
   const status = JSON.parse(statusRes.body)
-  assert.equal(status.to, 'lzx_xkzdwb@163.com')
+  assert.equal(status.to, 'you@example.com')
   assert.equal(status.schedule, '每周日 00:00（Asia/Shanghai）')
   assert.ok(typeof status.nextRunLocal === 'string' && status.nextRunLocal.length === 16)
 
