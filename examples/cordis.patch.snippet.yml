@@ -1,0 +1,28 @@
+# 把这段加进 ~/.dsh/profiles/desktop/cordis.patch.yml 的 `- insert:` 列表里，
+# 然后重启 DSH。路径按你机器上的实际位置改；config 里只有 email 相关的值需要改。
+- insert:
+    - id: weekly-report
+      name: "P:/工程/DeepseekHarness/系统/weekly-report/src/plugin.js"
+      config:
+        # 发给谁 / 用哪个邮箱发
+        to: lzx_xkzdwb@163.com
+        address: xkdobepc@163.com
+        displayName: DSH 周报
+        # 授权码（不是登录密码）放在这个文件里：{"authCode":"…"}
+        secretsFile: "P:/工程/DeepseekHarness/系统/email-approval/secrets.json"
+        # 发送时刻：weekday 0=周日 1=周一 … 6=周六；time 为当地 24 小时制
+        # 「周六晚上凌晨 0 点」= 周日 00:00 → weekday: 0
+        # 想改成周六 00:00 就写 weekday: 6
+        weekday: 0
+        time: "00:00"
+        timeZone: Asia/Shanghai
+        # 到点时 DSH 没开：下次启动补发一次（主题带「补发」）
+        catchUp: true
+        windowDays: 7
+        # 与 04-统计插件（用量面板）同一套占位价，改这里等于同时改邮件里的费用
+        pricing:
+          default:
+            input: 2
+            output: 8
+            cacheRead: 0.5
+            cacheWrite: 2

@@ -1,0 +1,13 @@
+{
+  "name": "dsh-weekly-report",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DSH 每周邮件周报：每周固定时刻把这一周的 token 用量与工作汇总发到指定邮箱。",
+  "main": "src/plugin.js",
+  "scripts": {
+    "test": "node test/run-tests.mjs",
+    "preview": "node tools/weekly-report.mjs --days 7",
+    "probe": "node tools/probe-mail.mjs"
+  }
+}
